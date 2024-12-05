@@ -1,34 +1,32 @@
-const apiKey = 'EOnTvNRrSetcxVd20ofaPl9kSYyabg3TrdECO6Da'; // Tu clave API
-let asteroidChart = null; // Variable para almacenar el gráfico actual
+const apiKey = 'EOnTvNRrSetcxVd20ofaPl9kSYyabg3TrdECO6Da'; 
+let asteroidChart = null; 
 
-// Al cargar la página, mostrar solo la primera sección (Asteroides)
 window.onload = function() {
-  showSection('asteroids');  // Mostrar la sección de Asteroides por defecto
-  document.getElementById('asteroids-date').addEventListener('change', fetchAsteroids); // Escuchar cambios en el calendario de asteroides
+  showSection('asteroids');  
+  document.getElementById('asteroids-date').addEventListener('change', fetchAsteroids); 
 };
 
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
-    section.style.display = 'none';  // Ocultar todas las secciones
+    section.style.display = 'none';  
   });
-  document.getElementById(sectionId).style.display = 'block';  // Mostrar solo la sección seleccionada
+  document.getElementById(sectionId).style.display = 'block';  
 
   if (sectionId === 'asteroids') {
     const date = document.getElementById('asteroids-date').value;
     if (date) {
-      fetchAsteroids();  // Actualizar los asteroides si ya se tiene una fecha seleccionada
+      fetchAsteroids();  
     }
   }
 }
 
-// Generación de colores para las barras
 function generateRandomColors(count) {
   return Array.from({ length: count }, () => `hsl(${Math.random() * 360}, 70%, 50%)`);
 }
 
 function fetchAsteroids() {
   const date = document.getElementById('asteroids-date').value;
-  if (!date) return;  // No hacer nada si no se ha seleccionado una fecha
+  if (!date) return; 
 
   const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${date}&end_date=${date}&api_key=${apiKey}`;
 
@@ -41,12 +39,10 @@ function fetchAsteroids() {
         const diameters = asteroids.map(a => a.estimated_diameter.kilometers.estimated_diameter_max);
         const colors = generateRandomColors(asteroids.length);
 
-        // Si ya existe un gráfico, destruirlo antes de crear uno nuevo
         if (asteroidChart) {
           asteroidChart.destroy();
         }
 
-        // Crear el nuevo gráfico
         asteroidChart = new Chart(document.getElementById('asteroids-chart'), {
           type: 'bar',
           data: {
@@ -98,13 +94,11 @@ function fetchMarsPhotos() {
     });
 }
 
-// Función para abrir el modal de imagen ampliada
 function openModal(imageUrl) {
   document.getElementById('expanded-image').src = imageUrl;
   document.getElementById('image-modal').style.display = 'flex';
 }
 
-// Función para cerrar el modal
 function closeModal() {
   document.getElementById('image-modal').style.display = 'none';
 }
