@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CosmicNavigator - Consulta API NASA</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-image: url('https://cdn.pixabay.com/photo/2023/11/24/03/43/space-8409016_1280.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    #nav-bar {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+    }
+    #nav-bar a {
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 18px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    #nav-bar a:hover {
+      background-color: #f7c600;
+      color: #222;
+      transform: scale(1.1);
+    }
+    #content {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    button {
+      background-color: #f7c600;
+      color: #222;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #e0a800;
+      transform: scale(1.05);
+    }
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+
+    /* Efecto hover para las imágenes de Marte */
+    #mars-photos img {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    #mars-photos img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Estilo del modal */
+    #image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    #close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="header">
+      <h1>CosmicNavigator - Explorando el Universo</h1>
+    </div>
+
+    <div id="nav-bar">
+      <a href="#" onclick="showSection('asteroids')">Asteroides</a>
+      <a href="#" onclick="showSection('apod')">Imagen del Día</a>
+      <a href="#" onclick="showSection('mars')">Fotos de Marte</a>
+    </div>
+
+    <div id="content">
+      <div id="asteroids" class="section">
+        <h2>Asteroides Cercanos</h2>
+        <input type="date" id="asteroids-date">
+        <button onclick="fetchAsteroids()">Consultar Asteroides</button>
+        <div id="asteroids-results"></div>
+        <canvas id="asteroids-chart"></canvas>
+      </div>
+
+      <div id="apod" class="section">
+        <h2>Imagen del Día</h2>
+        <input type="date" id="apod-date">
+        <button onclick="fetchApod()">Consultar Imagen</button>
+        <div id="apod-results"></div>
+      </div>
+
+      <div id="mars" class="section">
+        <h2>Fotos de Marte</h2>
+        <input type="date" id="mars-rover-date">
+        <button onclick="fetchMarsPhotos()">Consultar Fotos</button>
+        <div id="mars-photos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para imagen ampliada -->
+  <div id="image-modal" style="display: none;">
+    <div id="modal-content">
+      <span id="close-modal" onclick="closeModal()">X</span>
+      <img id="expanded-image" src="" alt="Ampliar imagen" style="max-width: 100%;">
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
